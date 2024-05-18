@@ -127,7 +127,7 @@ def addHair(ob, struct, hcoords, scn, cfg=None, override={}):
         if hasattr(pset, "cycles_curve_settings"):
             ccset = pset.cycles_curve_settings
         else:
-            ccset = pset.cycles
+            ccset =  bpy.data.particles[psys.name]
         ccset.root_width = 1.0
         ccset.tip_width = 0
         ccset.radius_scale = 0.01*ob.MhxScale
@@ -183,8 +183,14 @@ def makeDeflector(pair, rig, bnames, cfg):
                 break
 
     setattr(ob, DrawType, 'WIRE')
-    ob.field.type = 'FORCE'
-    print("FIELD", ob.field, ob.field.type)
+    if not ob.field or ob.field.type == 'None':
+      ob.select_set(True)
+      old_active = bpy.context.view_layer.objects.active 
+      bpy.context.view_layer.objects.active = ob
+      bpy.ops.object.forcefield_toggle()
+      ob.select_set(False)
+      bpy.context.view_layer.objects.active = old_active
+    # print("FIELD", ob.field, ob.field.type)
     ob.field.shape = 'SURFACE'
     ob.field.strength = 240.0
     ob.field.falloff_type = 'SPHERE'
