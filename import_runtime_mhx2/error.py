@@ -43,7 +43,7 @@ class ErrorOperator(bpy.types.Operator):
         height = 20+5*len(theErrorLines)
         #self.report({'INFO'}, theMessage)
         wm = context.window_manager
-        res = wm.invoke_props_dialog(self, width=width, height=height)
+        res = wm.invoke_props_dialog(self, width=width)
         return res
 
     def draw(self, context):
